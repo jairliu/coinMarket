@@ -1,68 +1,56 @@
 package market;
 
 import com.intellij.concurrency.JobScheduler;
-import com.intellij.openapi.diagnostic.Logger;
 
 import java.awt.*;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.TimeUnit;
 
 public class CoinMarketManager {
-    private static final Logger log = Logger.getInstance(CoinMarketManager.class);
-
-    volatile static String price = "0";
-    static boolean broken = false;
 
     private static Set<CoinMarketPanel> coinMarketPanels = new CopyOnWriteArraySet<>();
+    public static volatile String price = "0";
 
     static {
-        JobScheduler.getScheduler().scheduleWithFixedDelay(CoinMarketManager::update, 1, 1, TimeUnit.SECONDS);
+        JobScheduler.getScheduler().execute(CoinMarketManager::update);
     }
 
     static synchronized void update() {
-        try {
-
-            price = getPrice();
-
-            boolean painted = false;
-            for (CoinMarketPanel coinMarketPanel : coinMarketPanels) {
-                painted = coinMarketPanel.update() || painted;
-            }
-            if (painted) {
-                Toolkit.getDefaultToolkit().sync();
-            }
-            broken = false;
-        } catch (Exception e) {
-            if (broken) {
-                log.error(e);
-                throw e;
-            } else {
-                log.info(e);
-                broken = true;
+        while (true) {
+            try {
+                price = getPrice();
+                boolean painted = false;
+                for (CoinMarketPanel coinMarketPanel : coinMarketPanels) {
+                    painted = coinMarketPanel.update() || painted;
+                }
+                if (painted) {
+                    Toolkit.getDefaultToolkit().sync();
+                }
+            } catch (Exception e) {
+                LogAction.addLog(e.getMessage());
+            } finally {
                 try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e1) {
+                    Thread.sleep(PerformanceWatcherForm.refreshTime * 1000);
+                } catch (InterruptedException e) {
+                    LogAction.addLog(e.getMessage());
                 }
             }
-        } catch (Throwable e) {
-            log.error(e);
-            throw e;
         }
     }
 
     private static String getPrice() {
-        return String.valueOf(new Random().nextInt(100));
+        String a = PerformanceWatcherForm.coinName;
+        int b = PerformanceWatcherForm.refreshTime;
+        return a + ":" + b;
     }
 
     public static void unregister(CoinMarketPanel activatable) {
-        log.info("unregistering " + activatable);
+        LogAction.addLog("unregistering " + activatable);
         coinMarketPanels.remove(activatable);
     }
 
     public static void register(CoinMarketPanel activatable) {
-        log.info("registering " + activatable);
+        LogAction.addLog("registering " + activatable);
         coinMarketPanels.add(activatable);
     }
 }

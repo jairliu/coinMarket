@@ -3,19 +3,13 @@ package market;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.project.DumbAwareAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.wm.CustomStatusBarWidget;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.update.Activatable;
 import com.intellij.util.ui.update.UiNotifyConnector;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -29,18 +23,16 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
     public static final String WIDGET_ID = "market.CoinMarketPanel";
     private static final String SAMPLE_STRING = "123456";
 
-    private String projectName;
+    private static final CoinMarketPanel instance = new CoinMarketPanel();
 
-    public CoinMarketPanel(Project project) {
-        this.projectName = project.getName();
+    private CoinMarketPanel() {
+        super.setOpaque(false);
+        super.setFocusable(false);
+        super.setToolTipText(PerformanceWatcherForm.coinName);
 
-        setOpaque(false);
-        setFocusable(false);
-        setToolTipText("IDE CPU usage");
-
-        updateUI();
-        setFont(getWidgetFont());
-        setBorder(BorderFactory.createEmptyBorder());
+        super.updateUI();
+        super.setFont(getWidgetFont());
+        super.setBorder(BorderFactory.createEmptyBorder());
 
         new UiNotifyConnector(this, new Activatable() {
             @Override
@@ -57,25 +49,19 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
             @Override
             public void mousePressed(MouseEvent e) {
                 DataContext context = DataManager.getInstance().getDataContext(CoinMarketPanel.this);
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    ActionManager.getInstance().getAction("TakeThreadDump").actionPerformed(new AnActionEvent(e, context, ActionPlaces.UNKNOWN, new Presentation(""), ActionManager.getInstance(), 0));
-                } else if (SwingUtilities.isRightMouseButton(e)) {
-                    ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(null, getActionGroup(), context, JBPopupFactory.ActionSelectionAid.MNEMONICS, false);
-                    Dimension dimension = popup.getContent().getPreferredSize();
-                    Point at = new Point(0, -dimension.height);
-                    popup.show(new RelativePoint(e.getComponent(), at));
-                }
+                ActionManager.getInstance().getAction("LogAction").actionPerformed(new AnActionEvent(e, context, ActionPlaces.UNKNOWN, new Presentation(""), ActionManager.getInstance(), 0));
             }
         };
         addMouseListener(mouseAdapter);
     }
 
-    @NotNull
-    private DefaultActionGroup getActionGroup() {
-        DumbAwareAction dumbAwareAction1 = (DumbAwareAction) ActionManager.getInstance().getAction("TakeThreadDump");
-        DumbAwareAction dumbAwareAction2 = (DumbAwareAction) ActionManager.getInstance().getAction("OpenLastUiFreezeThreadDump");
-        DumbAwareAction dumbAwareAction3 = (DumbAwareAction) ActionManager.getInstance().getAction("OpenPerformanceWatcherSettings");
-        return new DefaultActionGroup(dumbAwareAction1, dumbAwareAction2, dumbAwareAction3);
+    public static CoinMarketPanel getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void setToolTipText(String text) {
+        super.setToolTipText(text);
     }
 
     @Override
@@ -163,10 +149,5 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("projectName", projectName).toString();
     }
 }

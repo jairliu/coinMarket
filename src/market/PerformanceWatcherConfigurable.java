@@ -1,26 +1,18 @@
-package market.diagnostic;
+package market;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
 public class PerformanceWatcherConfigurable implements Configurable {
-    private PerformanceWatcherForm performanceWatcherForm;
 
-    public PerformanceWatcherConfigurable() {
-        performanceWatcherForm = new PerformanceWatcherForm();
-    }
+    private PerformanceWatcherForm performanceWatcherForm = new PerformanceWatcherForm();
 
-    @Nls
     @Override
     public String getDisplayName() {
-        return "Frozen UI thread dumper";
+        return "CoinMarketSettings";
     }
 
-    @Nullable
     @Override
     public JComponent createComponent() {
         return performanceWatcherForm.getRoot();
@@ -32,7 +24,7 @@ public class PerformanceWatcherConfigurable implements Configurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         performanceWatcherForm.apply();
     }
 }

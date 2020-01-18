@@ -26,7 +26,7 @@ public class CoinMarketComponent implements ProjectComponent {
     public void projectOpened() {
         ideFrame = WindowManager.getInstance().getIdeFrame(this.project);
         StatusBar statusBar = ideFrame.getStatusBar();
-        statusBarWidget = new CoinMarketPanel(project);
+        statusBarWidget = CoinMarketPanel.getInstance();
         statusBar.addWidget(statusBarWidget, "before " + MemoryUsagePanel.WIDGET_ID);
     }
 
@@ -34,9 +34,7 @@ public class CoinMarketComponent implements ProjectComponent {
     public void projectClosed() {
         if (statusBarWidget != null) {
             final StatusBar statusBar = ideFrame.getStatusBar();
-            if (statusBar != null) {
-                statusBar.removeWidget(CoinMarketPanel.WIDGET_ID);
-            }
+            statusBar.removeWidget(CoinMarketPanel.WIDGET_ID);
             Disposer.dispose(statusBarWidget);
         }
     }
