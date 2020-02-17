@@ -9,9 +9,11 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 
 public class CoinMarketComponent implements ProjectComponent {
+
     private Project project;
     private CoinMarketPanel statusBarWidget;
     private IdeFrame ideFrame;
+    private StatusBar statusBar;
 
     public CoinMarketComponent(Project project) {
         this.project = project;
@@ -25,15 +27,14 @@ public class CoinMarketComponent implements ProjectComponent {
     @Override
     public void projectOpened() {
         ideFrame = WindowManager.getInstance().getIdeFrame(this.project);
-        StatusBar statusBar = ideFrame.getStatusBar();
+        statusBar = ideFrame.getStatusBar();
         statusBarWidget = CoinMarketPanel.getInstance();
         statusBar.addWidget(statusBarWidget, "before " + MemoryUsagePanel.WIDGET_ID);
     }
 
     @Override
     public void projectClosed() {
-        if (statusBarWidget != null) {
-            StatusBar statusBar = ideFrame.getStatusBar();
+        if (statusBarWidget != null && statusBar != null) {
             statusBar.removeWidget(CoinMarketPanel.WIDGET_ID);
             Disposer.dispose(statusBarWidget);
         }
