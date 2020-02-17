@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class PerformanceWatcherConfigurable implements Configurable {
 
-    private PerformanceWatcherForm performanceWatcherForm = new PerformanceWatcherForm();
+    private static final PerformanceWatcherForm performanceWatcherForm = new PerformanceWatcherForm();
 
     @Override
     public String getDisplayName() {

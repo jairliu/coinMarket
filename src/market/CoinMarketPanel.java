@@ -17,11 +17,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
 
     public static final String WIDGET_ID = "market.CoinMarketPanel";
-    private static final String SAMPLE_STRING = "123456";
+    private static final String SAMPLE_STRING = "12345678";
 
     private static final CoinMarketPanel instance = new CoinMarketPanel();
 
@@ -88,13 +89,16 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics graphics) {
+        if (Objects.isNull(graphics)) {
+            return;
+        }
         String info = CoinMarketManager.price;
 
         Dimension size = getSize();
         Insets insets = getInsets();
 
-        Image bufferedImage = UIUtil.createImage(g, size.width, size.height, BufferedImage.TYPE_INT_ARGB);
+        Image bufferedImage = UIUtil.createImage(graphics, size.width, size.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D) bufferedImage.getGraphics().create();
 
         int totalBarLength = size.width - insets.left - insets.right - 3;
@@ -108,7 +112,7 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
         g2.fillRect(xOffset + info.length() + 1, yOffset, info.length() + 1, barHeight);
         g2.setFont(getFont());
 
-        FontMetrics fontMetrics = g.getFontMetrics();
+        FontMetrics fontMetrics = graphics.getFontMetrics();
         int infoWidth = fontMetrics.charsWidth(info.toCharArray(), 0, info.length());
         int infoHeight = fontMetrics.getAscent();
         UISettings.setupAntialiasing(g2);
@@ -121,7 +125,7 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
         g2.drawRect(0, 0, size.width - 2, size.height - 1);
         g2.dispose();
 
-        UIUtil.drawImage(g, bufferedImage, 0, 0, null);
+        UIUtil.drawImage(graphics, bufferedImage, 0, 0, null);
     }
 
     @Override
@@ -142,12 +146,8 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
         return getPreferredSize();
     }
 
-    public boolean update() {
+    public void update() {
         Graphics graphics = getGraphics();
-        if (graphics != null) {
-            paintComponent(graphics);
-            return true;
-        }
-        return false;
+        paintComponent(graphics);
     }
 }

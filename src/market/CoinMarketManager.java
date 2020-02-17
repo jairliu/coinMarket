@@ -8,8 +8,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class CoinMarketManager {
 
+    public static volatile String price = "-1";
     private static Set<CoinMarketPanel> coinMarketPanels = new CopyOnWriteArraySet<>();
-    public static volatile String price = "0";
 
     static {
         JobScheduler.getScheduler().execute(CoinMarketManager::update);
@@ -18,14 +18,9 @@ public class CoinMarketManager {
     static synchronized void update() {
         while (true) {
             try {
-                price = getPrice();
-                boolean painted = false;
-                for (CoinMarketPanel coinMarketPanel : coinMarketPanels) {
-                    painted = coinMarketPanel.update() || painted;
-                }
-                if (painted) {
-                    Toolkit.getDefaultToolkit().sync();
-                }
+                price = Utils.getPrice();
+                coinMarketPanels.forEach(CoinMarketPanel::update);
+                Toolkit.getDefaultToolkit().sync();
             } catch (Exception e) {
                 LogAction.addLog(e.getMessage());
             } finally {
@@ -38,19 +33,11 @@ public class CoinMarketManager {
         }
     }
 
-    private static String getPrice() {
-        String a = PerformanceWatcherForm.coinName;
-        int b = PerformanceWatcherForm.refreshTime;
-        return a + ":" + b;
-    }
-
     public static void unregister(CoinMarketPanel activatable) {
-        LogAction.addLog("unregistering " + activatable);
         coinMarketPanels.remove(activatable);
     }
 
     public static void register(CoinMarketPanel activatable) {
-        LogAction.addLog("registering " + activatable);
         coinMarketPanels.add(activatable);
     }
 }

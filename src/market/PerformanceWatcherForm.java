@@ -22,7 +22,7 @@ public class PerformanceWatcherForm {
 
     public boolean isModified() {
         try {
-            return coinName != coinNameField.getText() || refreshTime != Integer.valueOf(refreshTimeField.getText());
+            return !coinName.equals(coinNameField.getText()) || refreshTime != Integer.valueOf(refreshTimeField.getText());
         } catch (NumberFormatException e) {
             return false;
         }

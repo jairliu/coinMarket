@@ -33,7 +33,7 @@ public class CoinMarketComponent implements ProjectComponent {
     @Override
     public void projectClosed() {
         if (statusBarWidget != null) {
-            final StatusBar statusBar = ideFrame.getStatusBar();
+            StatusBar statusBar = ideFrame.getStatusBar();
             statusBar.removeWidget(CoinMarketPanel.WIDGET_ID);
             Disposer.dispose(statusBarWidget);
         }

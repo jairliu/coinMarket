@@ -1,14 +1,14 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>coinMarket.CoinMarket</id>
     <name>coinMarket</name>
     <version>1.0</version>
-    <vendor url="https://github.com/krasa/CpuUsageIndicator" email="vojta.krasa@gmail.com">Vojtech Krasa</vendor>
+    <vendor url="" email="">jair</vendor>
 
-    <description><![CDATA[
-      CPU Usage Indicator in the status bar, just like the Memory Indicator.<br/>
-    ]]></description>
+    <description>
+        时时币价插件，使用币安接口-------------------------------------
+    </description>
 
-    <idea-version since-build="172.450"/>
+    <idea-version since-build="1.0"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -18,8 +18,7 @@
     </extensions>
 
     <actions>
-        <action id="LogAction" class="market.LogAction" text="LogAction" description="LogAction">
-        </action>
+        <action id="LogAction" class="market.LogAction" text="LogAction" description="LogAction"></action>
     </actions>
 
     <project-components>
