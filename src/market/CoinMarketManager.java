@@ -3,6 +3,7 @@ package market;
 import com.intellij.concurrency.JobScheduler;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -19,11 +20,13 @@ public class CoinMarketManager {
         while (true) {
             try {
                 price = Utils.getPrice();
-                coinMarketPanels.forEach(CoinMarketPanel::update);
-                Toolkit.getDefaultToolkit().sync();
+                price = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
             } catch (Exception e) {
+                price = "-1";
                 LogAction.addLog(e.getMessage());
             } finally {
+                coinMarketPanels.forEach(CoinMarketPanel::update);
+                Toolkit.getDefaultToolkit().sync();
                 try {
                     Thread.sleep(PerformanceWatcherForm.refreshTime * 1000);
                 } catch (InterruptedException e) {

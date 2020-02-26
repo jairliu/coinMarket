@@ -18,8 +18,7 @@ public class Utils {
         String result = doGet(url);
         Gson gson = new Gson();
         JsonObject obj = gson.fromJson(result, JsonObject.class);
-        String price = obj.getAsJsonObject("ticker").get("last").getAsString();
-        return price.substring(0, price.indexOf(".") + 3);
+        return obj.getAsJsonObject("ticker").get("last").getAsString();
     }
 
     private static String doGet(String httpUrl) throws Exception {
