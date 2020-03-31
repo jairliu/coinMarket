@@ -20,7 +20,7 @@ public class CoinMarketManager {
         while (true) {
             try {
                 price = Utils.getPrice();
-                price = new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                price = new BigDecimal(price).setScale(PerformanceWatcherForm.pricePrecision, BigDecimal.ROUND_HALF_UP).toString();
             } catch (Exception e) {
                 price = "-1";
                 LogAction.addLog(e.getMessage());

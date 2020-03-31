@@ -7,13 +7,16 @@ public class PerformanceWatcherForm {
 
     public static volatile String coinName = "EOS";
     public static volatile int refreshTime = 10;
+    public static volatile int pricePrecision = 3;
 
     private JTextField coinNameField;
     private JTextField refreshTimeField;
+    private JTextField pricePrecisionField;
 
     public PerformanceWatcherForm() {
         coinName = coinNameField.getText();
         refreshTime = Integer.valueOf(refreshTimeField.getText());
+        pricePrecision = Integer.valueOf(pricePrecisionField.getText());
     }
 
     public JPanel getRoot() {
@@ -22,7 +25,9 @@ public class PerformanceWatcherForm {
 
     public boolean isModified() {
         try {
-            return !coinName.equals(coinNameField.getText()) || refreshTime != Integer.valueOf(refreshTimeField.getText());
+            return !coinName.equals(coinNameField.getText())
+                    || refreshTime != Integer.valueOf(refreshTimeField.getText())
+                    || pricePrecision != Integer.valueOf(pricePrecisionField.getText());
         } catch (NumberFormatException e) {
             return false;
         }
@@ -30,7 +35,7 @@ public class PerformanceWatcherForm {
 
     public void apply() {
         try {
-            if (Integer.parseInt(refreshTimeField.getText()) < 1) {
+            if (Integer.parseInt(refreshTimeField.getText()) < 1 || Integer.parseInt(pricePrecisionField.getText()) < 0) {
                 throw new RuntimeException("Invalid values");
             }
         } catch (Exception e) {
@@ -38,6 +43,7 @@ public class PerformanceWatcherForm {
         }
         coinName = coinNameField.getText();
         refreshTime = Integer.valueOf(refreshTimeField.getText());
+        pricePrecision = Integer.valueOf(pricePrecisionField.getText());
         CoinMarketPanel.getInstance().setToolTipText(coinName);
     }
 }
