@@ -1,7 +1,6 @@
 package market;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import org.codehaus.jettison.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -16,9 +15,8 @@ public class Utils {
     public static String getPrice() throws Exception {
         String url = String.format(BASE_URL, PerformanceWatcherForm.coinName.toLowerCase());
         String result = doGet(url);
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(result, JsonObject.class);
-        return obj.getAsJsonObject("ticker").get("last").getAsString();
+        JSONObject json = new JSONObject(result);
+        return json.getJSONObject("ticker").getString("last");
     }
 
     private static String doGet(String httpUrl) throws Exception {
