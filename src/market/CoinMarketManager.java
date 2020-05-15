@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class CoinMarketManager {
 
     public static volatile String price = "-1";
-    private static Set<CoinMarketPanel> coinMarketPanels = new CopyOnWriteArraySet<>();
+    private static final Set<CoinMarketPanel> coinMarketPanels = new CopyOnWriteArraySet<>();
 
     static {
         JobScheduler.getScheduler().execute(CoinMarketManager::update);

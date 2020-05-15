@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class Utils {
 
@@ -34,7 +35,7 @@ public class Utils {
             if (connection.getResponseCode() == 200) {
                 is = connection.getInputStream();
                 if (is != null) {
-                    br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                    br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
                     String temp;
                     while ((temp = br.readLine()) != null) {
                         result.append(temp);

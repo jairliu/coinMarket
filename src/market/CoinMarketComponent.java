@@ -10,7 +10,7 @@ import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 
 public class CoinMarketComponent implements ProjectComponent {
 
-    private Project project;
+    private final Project project;
     private CoinMarketPanel statusBarWidget;
     private IdeFrame ideFrame;
     private StatusBar statusBar;

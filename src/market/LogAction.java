@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 public class LogAction extends DumbAwareAction {
 
-    private static volatile StringBuilder sb = new StringBuilder();
+    private static final StringBuilder sb = new StringBuilder();
 
     public static void addLog(String log) {
         if (sb.length() > 10000) {
