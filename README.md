@@ -1,2 +1,2 @@
 # coinMarket
-时时币价插件，使用币安接口
+IntelliJ IDEA 时时币价插件，使用币安接口。
