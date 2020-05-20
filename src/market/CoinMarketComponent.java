@@ -6,7 +6,6 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.openapi.wm.impl.status.MemoryUsagePanel;
 
 public class CoinMarketComponent implements ProjectComponent {
 
@@ -29,7 +28,7 @@ public class CoinMarketComponent implements ProjectComponent {
         ideFrame = WindowManager.getInstance().getIdeFrame(this.project);
         statusBar = ideFrame.getStatusBar();
         statusBarWidget = CoinMarketPanel.getInstance();
-        statusBar.addWidget(statusBarWidget, "before " + MemoryUsagePanel.WIDGET_ID);
+        statusBar.addWidget(statusBarWidget);
     }
 
     @Override

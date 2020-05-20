@@ -29,7 +29,6 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
     private CoinMarketPanel() {
         super.setOpaque(false);
         super.setFocusable(false);
-        super.setToolTipText(PerformanceWatcherForm.coinName);
 
         super.updateUI();
         super.setFont(getWidgetFont());
@@ -149,5 +148,6 @@ public class CoinMarketPanel extends JButton implements CustomStatusBarWidget {
     public void update() {
         Graphics graphics = getGraphics();
         paintComponent(graphics);
+        instance.setToolTipText(Utils.getTime());
     }
 }

@@ -8,16 +8,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Utils {
 
-    public static final String BASE_URL = "http://api.zb.live/data/v1/ticker?market=%s_usdt";
+    private static final String BASE_URL = "http://api.zb.live/data/v1/ticker?market=%s_usdt";
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public static String getPrice() throws Exception {
         String url = String.format(BASE_URL, PerformanceWatcherForm.coinName.toLowerCase());
         String result = doGet(url);
         JSONObject json = new JSONObject(result);
         return json.getJSONObject("ticker").getString("last");
+    }
+
+    public static String getTime() {
+        return LocalTime.now().format(TIME_FORMATTER);
     }
 
     private static String doGet(String httpUrl) throws Exception {

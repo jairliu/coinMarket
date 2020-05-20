@@ -44,6 +44,5 @@ public class PerformanceWatcherForm {
         coinName = coinNameField.getText();
         refreshTime = Integer.valueOf(refreshTimeField.getText());
         pricePrecision = Integer.valueOf(pricePrecisionField.getText());
-        CoinMarketPanel.getInstance().setToolTipText(coinName);
     }
 }
